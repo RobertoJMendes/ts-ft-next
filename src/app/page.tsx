@@ -1,10 +1,11 @@
 
 import Link from "next/link";
+import './pg.css'
 
 export default function Home() {
   return (
-    <main>
-      <Link href='/users/listar/' className="w2 h2" >Users</Link>
+    <main className="flex justify-center mt-8">
+      <Link href='/users/listar/' className="text-blue-900 text-6xl" >Users</Link>
     </main>
   );
 }
