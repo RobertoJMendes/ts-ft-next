@@ -1,5 +1,6 @@
 "use client"
 import instance from "@/app/services/api";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -8,7 +9,7 @@ interface User { id:number, name:string, email:string }
 export default function Users() {
     //const [error, setError] = useState<string|null>(null)
     const [users, setUsers] = useState<User[]>([])
-    const fetchUsers = async()=>{
+    const fetchUsers = async ()=>{
       try {
         const response = await instance.get("/users")
         console.log(response.data)
@@ -36,6 +37,7 @@ export default function Users() {
             <th className="w-full flex justify-items-start">id:</th>
             <th className="w-full flex justify-items-start">nome:</th>
             <th className="w-full flex justify-items-start">email:</th>
+            <th className="w-full flex justify-center">Visualizar</th>
           </tr>
         </thead>
         <tbody className="flex flex-col gap-2 px-8 mt-2">
@@ -44,6 +46,11 @@ export default function Users() {
               <td className="w-full flex justify-items-start">{user.id}</td>
               <td className="w-full flex justify-items-start">{user.name}</td>
               <td className="w-full flex justify-items-start">{user.email}</td>
+              <td className="w-full flex justify-center">
+                <Link href={`/users/visualizar/${user.id}`}>
+                  <Image src='/file.svg' alt='file' width={20} height={20}/>
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>

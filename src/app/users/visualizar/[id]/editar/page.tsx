@@ -1,26 +1,42 @@
 "use client"
 import instance from "@/app/services/api";
 import Link from "next/link";
-import { useState } from "react";
-export default function Home() { //    const [error, setError] = useState<string|null>(null) //  const [sucess, setSucess] = useState<string|null>(null)
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+export default function Editar() { //    const [error, setError] = useState<string|null>(null) //  const [sucess, setSucess] = useState<string|null>(null)
     const [name, setName] = useState<string|"">("")
     const [email, setEmail] = useState<string|"">("")
-
-    const handleSubmit = async (event:React.FormEvent)=>{
-        event.preventDefault()
-        try {
-          const response = await instance.post('/user', {
-            name: name,
-            email: email
-          })
-          console.log(response.data)
-          setName("")
-          setEmail("")
-        } catch (error) {
-          console.log(error)
-        }
+    const {id} = useParams()
+      const userDetails = async (id:string)=>{
+    try {
+      const response = await instance.get(`/users/${id}`) //const userFinal = response.data.user
+      setName(response.data.user.name)
+      setEmail(response.data.user.email)
+    } catch (error) {
+      if(error){ console.log(error)}}}
+  useEffect(()=>{
+    if(id){
+      // Para garantir que o id seja um string!
+      const userId = Array.isArray(id)?id[0]:id
+      userDetails(userId)
     }
-  return (
+  },[id])
+    const handleSubmit = async (event:React.FormEvent)=>{
+      
+      event.preventDefault()
+      try {
+        await instance.put(`/users/${id}`, { name: name, email: email }) // console.log(response.data)
+        setName("")
+        setEmail("")
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    const router = useRouter()
+    function Redirecionar(){
+      router.push('/')
+    }
+    return (
     <main className="flex flex-col gap-2">
 
         <div className="mt-2 flex justify-between">
@@ -48,8 +64,8 @@ export default function Home() { //    const [error, setError] = useState<string
                 className="bg-amber-100 text-black pl-2" />
             </div>
 
-            <button type="submit" className="bg-fuchsia-700 cursor-pointer">Cadastrar!</button>
-
+            <button type="submit" onClick={Redirecionar} className="bg-fuchsia-700 hover:bg-lime-400 cursor-pointer">Editar!</button>
+            
         </form>
     
     </main>
