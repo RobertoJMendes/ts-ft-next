@@ -31,6 +31,7 @@ export default function Home() {
       userDetails(userId)
     }
   },[id])
+
   return (
     <main className="flex mt-8 flex-col">
       <div>
@@ -60,6 +61,7 @@ export default function Home() {
           </div>
           <div className="flex justify-between">
             <Link href={`/users/visualizar/${user.id}/editar`} className="text-blue-900" >Editar!</Link>
+
           </div>
         </div> )}
       </div>

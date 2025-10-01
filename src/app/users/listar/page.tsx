@@ -3,11 +3,13 @@ import instance from "@/app/services/api";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import BtnApagar from "../componentApagar/page";
 
 interface User { id:number, name:string, email:string }
 
 export default function Users() {
-    //const [error, setError] = useState<string|null>(null)
+    const [error, setError] = useState<string|"">("")
+    const [success, setSuccess] = useState<string|"">("")
     const [users, setUsers] = useState<User[]>([])
     const fetchUsers = async ()=>{
       try {
@@ -19,6 +21,10 @@ export default function Users() {
         console.log(error)
       }
     }
+    const handleSucess = ()=>{
+      fetchUsers()
+      setSuccess("Usuário Excluído!")
+    }
     useEffect(()=>{
       fetchUsers()
     },[])
@@ -27,10 +33,11 @@ export default function Users() {
       <div className="title flex justify-around mt-4">
         <div>
           Lista de Usuarios
-          </div>
-      <Link href='/users/cadastrar/' className="w2 h2" >Cadastrar</Link>
-      <Link href='/' className="w2 h2" >Início</Link>
-          </div>
+        </div>
+          <Link href='/users/cadastrar/' className="w2 h2" >Cadastrar</Link>
+          <Link href='/' className="w2 h2" >Início</Link>
+          {success && <p>{success}</p>}
+      </div>
       <table className="mt-4">
         <thead>
           <tr className="flex justify-around px-8">
@@ -46,10 +53,15 @@ export default function Users() {
               <td className="w-full flex justify-items-start">{user.id}</td>
               <td className="w-full flex justify-items-start">{user.name}</td>
               <td className="w-full flex justify-items-start">{user.email}</td>
-              <td className="w-full flex justify-center">
+              <td className="w-full flex justify-center gap-4">
                 <Link href={`/users/visualizar/${user.id}`}>
                   <Image src='/file.svg' alt='file' width={20} height={20}/>
                 </Link>
+                <BtnApagar
+                id={String(user.id)}
+                route="users"
+                onSucess={handleSucess}
+                />
               </td>
             </tr>
           ))}
@@ -61,4 +73,6 @@ export default function Users() {
 }
 /*
   <button onSubmit={fetchUsers}>Users</button>
+  setError={setError}
+  setSucess={setSuccess}
 */
